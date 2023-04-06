@@ -1,19 +1,12 @@
 <?php
 
-class SingleTag extends Tag {
-	public function render(): void
+class SingleTag extends Tag
+{
+	protected array $allowedTagNames = ['img', 'br', 'hr'];
+
+	public function render(): string
 	{
-		$this->setTagStructure();
-		echo $this->tagStructure;
-	}
-
-	public function setTagStructure(){
-		if( ! empty( $this->atts ) ){
-			foreach( $this->atts as $name => $value )
-				$this->tagStructure .= ' ' . $name . '="' . $value . '"';
-		}
-
-		$this->tagStructure = '<' . $this->tagName . $this->tagStructure . ' />';
+		return "<{$this->tagName} {$this->attrsToString()} />";
 	}
 }
 

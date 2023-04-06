@@ -1,9 +1,10 @@
 <?php
 
-abstract class Tag {
+abstract class Tag implements INode
+{
 	protected string $tagName;
 	protected array $atts = [];
-	protected string $tagStructure = '';
+	protected array $allowedTagNames = [];
 
 	public function __construct( string $tagName ){
 		$this->tagName = $tagName;
@@ -11,20 +12,22 @@ abstract class Tag {
 
 	public function attr( string $name, string $value ){
 		if( $name && $value ) $this->atts[$name] = $value;
+
+		return $this;
 	}
 
-	public function getTagStructure(): string
+	public function isValid(): bool
 	{
-		return $this->tagStructure;
+		return in_array( $this->tagName, $this->allowedTagNames );
 	}
 
-	public function deleteTagStructure(): void
+	protected function attrsToString(): string
 	{
-		$this->tagStructure = '';
+		$pairs = [];
+
+		foreach( $this->atts as $name => $value ) $pairs[] = "$name=\"$value\"";
+
+		return implode( ' ', $pairs );
 	}
-
-	public abstract function setTagStructure();
-
-	public abstract function render(): void;
 }
 
